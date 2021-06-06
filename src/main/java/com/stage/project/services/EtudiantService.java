@@ -26,4 +26,5 @@ public interface EtudiantService {
     ResponseEntity<String> addActivite(Long id,Long activite_id);
     ResponseEntity<String> deleteActivite(Long id, Long activite_id);
     List<Map> getEtudiantsByExam(Long id);
+    void sendNotification(List<Etudiant> etudiants);
 }

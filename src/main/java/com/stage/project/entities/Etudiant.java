@@ -63,6 +63,8 @@ public class Etudiant extends Auditable<String> {
     @NotNull
     private String nom;
     @NotNull
+    private String email;
+    @NotNull
     private String nomArabe;
     @NotNull
     private String prenom;
@@ -87,9 +89,10 @@ public class Etudiant extends Auditable<String> {
 
     }
 
-    public Etudiant(@NotNull int numero, @NotNull String nom, @NotNull String nomArabe, @NotNull String prenom, @NotNull String prenomArabe, @NotNull Date dateNaissance, String adresse, String tele1, String tele2, String metier, String remarque, @NotNull String photo, @NotNull Date dateInscription) {
+    public Etudiant(@NotNull int numero, @NotNull String nom,  @NotNull String email,@NotNull String nomArabe, @NotNull String prenom, @NotNull String prenomArabe, @NotNull Date dateNaissance, String adresse, String tele1, String tele2, String metier, String remarque, @NotNull String photo, @NotNull Date dateInscription) {
         this.numero = numero;
         this.nom = nom;
+        this.email = email;
         this.nomArabe = nomArabe;
         this.prenom = prenom;
         this.prenomArabe = prenomArabe;
@@ -125,6 +128,14 @@ public class Etudiant extends Auditable<String> {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNomArabe() {

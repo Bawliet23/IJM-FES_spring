@@ -3,6 +3,7 @@ package com.stage.project.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stage.project.Dao.*;
+import com.stage.project.config.EmailCfg;
 import com.stage.project.config.RandomString;
 import com.stage.project.entities.*;
 import org.apache.commons.io.FileUtils;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +58,10 @@ public class EtudiantServiceIml implements EtudiantService {
     RoleRepository roleRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Autowired
+    private EmailCfg emailCfg;
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
@@ -168,6 +175,7 @@ public class EtudiantServiceIml implements EtudiantService {
         }
         et.setNumero(etudiant.getNumero());
         et.setNom(etudiant.getNom());
+        et.setEmail(etudiant.getEmail());
         et.setPrenom(etudiant.getPrenom());
         et.setNomArabe(etudiant.getNomArabe());
         et.setPrenomArabe(etudiant.getPrenomArabe());
@@ -272,6 +280,19 @@ public class EtudiantServiceIml implements EtudiantService {
         return data;
     }
 
+    @Override
+    public void sendNotification(List<Etudiant> etudiants) {
+        for (Etudiant etudiant : etudiants){
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom(this.emailCfg.getUsername());
+            mailMessage.setTo(etudiant.getEmail());
+            mailMessage.setSubject("Payement");
+            mailMessage.setText("Bonjour  : "+etudiant.getNom() +" vous devez payer ");
+            javaMailSender.send(mailMessage);
+        }
+
+    }
+
     public Map<String, Object> etudiantData(Etudiant etudiant) {
 
         Map<String, Object> data = new HashMap<>();
@@ -294,6 +315,7 @@ public class EtudiantServiceIml implements EtudiantService {
         data.put("numero", etudiant.getNumero());
         data.put("nom", etudiant.getNom());
         data.put("prenom", etudiant.getPrenom());
+        data.put("email", etudiant.getEmail());
         data.put("nomArabe", etudiant.getNomArabe());
         data.put("prenomArabe", etudiant.getPrenomArabe());
         data.put("age", etudiant.getAge());

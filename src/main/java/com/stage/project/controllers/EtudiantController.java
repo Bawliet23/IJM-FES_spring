@@ -83,4 +83,9 @@ public class EtudiantController {
         return etudiantService.getEtudiantsByExam(id);
     }
 
+    @PostMapping("/notification")
+    public ResponseEntity<?> sendNotification(@RequestBody List<Etudiant> etudiants){
+        etudiantService.sendNotification(etudiants);
+        return  ResponseEntity.ok("Notification sent");
+    }
 }
